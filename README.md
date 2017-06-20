@@ -1,2 +1,2 @@
 # spring-cloud-config-file-monitoring
-Spring Cloud Config application which monitors for local file updates and notifies clients about the changes
+Spring Cloud Config example application which monitors for local folder configuration files updates and notifies clients about these changes
