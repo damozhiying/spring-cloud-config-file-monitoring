@@ -24,11 +24,20 @@ Gradle files are not maintained for now.
 
 ## Run the app
 
-To run the app, please follow the following steps:
+### Local folder config files
+To run the app to monitor a local folder configuration files, please follow the following steps:
 
 1. Since we are using spring-cloud-starter-bus-amqp dependency, this means that we need RabbitMQ Server to be running. You can download and install the version you prefer from https://www.rabbitmq.com/download.html.
 2. The local folder to the Server where the configuration files are located are configured in the  bootstrap.properties of the Server through the following property, which must be modified according to your local configuration:
    * spring.cloud.config.server.native.searchLocations=file:///${USERPROFILE}/Desktop/config
+   
+### GitBlit webhook
+1. In the complete/configuration-service gitblit folder you can find a Groovy GitBlit webhook, named notify-commit.grovy. Just configure this hook as active for a GitBlit repository (Repository > Edit > receive > post-receive scripts)
+2. To configure the server to listen to a Git repository folder, just uncomment in the  bootstrap.properties of the Server through the following property, which must be **spring.cloud.config.server.git.uri** and point to your required folder.
+3. In the same bootstrap.properties comment out the lines containing:
+3.1. spring.profiles.active=native
+3.2. spring.cloud.config.server.native.searchLocations
+
  
 ## Issues found and solved
 1. There is a mandatory Dependecy Management configuration, which in the base code was set as follows:
