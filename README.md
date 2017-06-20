@@ -32,19 +32,19 @@ To run the app, please follow the following steps:
  
 ## Issues found and solved
 1. There is a mandatory Dependecy Management configuration, which in the base code was set as follows:
-  *<dependencyManagement>
+  *`<dependencyManagement>
        <dependencies>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>**Camden.SR5**</version>
+				<version>Camden.SR5</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>*
+	</dependencyManagement>`*
 I had to switch this dependency to the Dalston.RELEASE to make the example work. With the Camden.SR5 dependency the Client wasn't being aware of the configuration file changes for some reason. So the dependency now reads as follows:
-*<dependencyManagement> 
+ *`<dependencyManagement> 
   <dependencies>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -54,4 +54,4 @@ I had to switch this dependency to the Dalston.RELEASE to make the example work.
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>*
+	</dependencyManagement>`*
