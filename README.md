@@ -28,7 +28,7 @@ Gradle files are not maintained for now.
 To run the app to monitor a local folder configuration files, please follow the following steps:
 
 1. Since we are using spring-cloud-starter-bus-amqp dependency, this means that we need RabbitMQ Server to be running. You can download and install the version you prefer from https://www.rabbitmq.com/download.html.
-2. The local folder to the Server where the configuration files are located are configured in the  bootstrap.properties of the Server through the following property, which must be modified according to your local configuration:
+2. The local folder to the Server where the configuration files are located is configured in the  bootstrap.properties of the Server through the following property, which must be modified according to your local configuration:
    * spring.cloud.config.server.native.searchLocations=file:///${USERPROFILE}/Desktop/config
    
 ### GitBlit webhook
