@@ -1,11 +1,13 @@
 # spring-cloud-config-file-monitoring app
 ## Base Code
-Base code is taken from:  https://github.com/spring-guides/gs-centralized-configuration.git. This example is based on a manual /refresh trigger from the client after, it is not configured for automatic properties refreshing.
+Base code is taken from:  https://github.com/spring-guides/gs-centralized-configuration.git. This example is based on a manual /refresh trigger from the client after any properties file has been updated; it is not configured for automatic properties refreshing (automatic server -> client notifications not happening).
 
 ## Project description
-This is a Spring Cloud Config example application which monitors for local folder configuration files updates and notifies clients about these changes.
+This is a Spring Cloud Config example application which monitors for local folder configuration files updates and autmoatically notifies clients about these changes.
 
-The goal of this example is to provide a working example of Spring Cloud Config for automatic refreshing of application configuration files.
+The communication between Server and Clients is through amqp protocol, sending messages to a shared RabbitMQ server.
+
+The goal of this example is to provide a working example of Spring Cloud Config for automatic refreshing of application configuration files on update of these files in the server.
 
 For the Server app, this example is using the following Spring packages:
 1. spring-cloud-config-server
