@@ -35,7 +35,7 @@ To run the app to monitor a local folder configuration files, please follow the 
 1. In the complete/configuration-service gitblit folder you can find a Groovy GitBlit webhook, named notify-commit.grovy. Just configure this hook as active for a GitBlit repository (Repository > Edit > receive > post-receive scripts)
 2. To configure the server to listen to a Git repository folder, just uncomment in the  bootstrap.properties of the Server through the following property, which must be **spring.cloud.config.server.git.uri** and point to your required folder.
 3. In the same bootstrap.properties comment out the lines containing:  
-  3.1. spring.profiles.active=native
+  3.1. spring.profiles.active=native  
   3.2. spring.cloud.config.server.native.searchLocations
 
  
