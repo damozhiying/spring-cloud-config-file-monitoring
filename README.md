@@ -35,6 +35,9 @@ To run the app to monitor a local folder configuration files, please follow the 
    * spring.cloud.config.server.native.searchLocations=file:///${USERPROFILE}/Desktop/config
    
 ### GitBlit webhook
+
+For this demonstration I have locally installed a GitBlit server, but of course this can be configured in a remote Git server (either it is GitHub, GitLab, etc) if you provide the corresponding webhook.
+
 1. In the *complete/configuration-service* **gitblit** folder you can find a Groovy GitBlit webhook, named *notify-commit.groovy*. Copy and paste this Groovy script under [GitBlit-config-folder]/data/groovy folder and configure this hook as active for a GitBlit repository and event (Repository > Edit > receive > post-receive scripts)
 2. To configure the server to listen to a Git repository folder, just uncomment in the *bootstrap.properties* of the Server app the property **spring.cloud.config.server.git.uri** and point it to your required folder.
 3. In the same *bootstrap.properties* comment out the lines containing:  
