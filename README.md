@@ -39,7 +39,7 @@ To run the app to monitor a local folder configuration files, please follow the 
   3.2. spring.cloud.config.server.native.searchLocations
 
  
-## Issues found and solved
+## Stones found in the way and solved
 1. There is a mandatory Dependecy Management configuration, which in the base code was set as follows:
   *`<dependencyManagement>
        <dependencies>
