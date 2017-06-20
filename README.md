@@ -44,15 +44,14 @@ To run the app, please follow the following steps:
 		</dependencies>
 	</dependencyManagement>`*
 I had to switch this dependency to the Dalston.RELEASE to make the example work. With the Camden.SR5 dependency the Client wasn't being aware of the configuration file changes for some reason. So the dependency now reads as follows:
- *`<dependencyManagement> 
-  <dependencies>
+  *`<dependencyManagement>
+       <dependencies>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>**Dalston.RELEASE**</version>
+				<version>Dalston.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>`*
-	
