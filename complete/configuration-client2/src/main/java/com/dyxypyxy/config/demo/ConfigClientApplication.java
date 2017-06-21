@@ -1,4 +1,4 @@
-package hello;
+package com.dyxypyxy.config.demo;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -21,11 +21,14 @@ public class ConfigClientApplication {
 @Configuration
 class MessageRestController {
 
-    @Value("${message:Hello default}")
-    private String message;
+    @Value("${db.url:<url not defined>}")
+    private String dbUrl;
 
-    @RequestMapping("/message")
-    String getMessage() {
-        return this.message;
+    @Value("${db.provider:<provider not defined>}")
+    private String dbProvider;
+
+    @RequestMapping("/config")
+    String getConfig() {
+        return "DB URL : " + this.dbUrl + " -- Provider: " + dbProvider;
     }
 }

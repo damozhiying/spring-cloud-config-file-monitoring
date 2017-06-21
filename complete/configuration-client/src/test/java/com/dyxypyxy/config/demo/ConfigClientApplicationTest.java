@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package hello;
+package com.dyxypyxy.config.demo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,11 +42,11 @@ public class ConfigClientApplicationTest {
 
     @Test
     public void contextLoads() {
-        assertThat(controller.getMessage()).isNotEqualTo("Hello test");
+        assertThat(controller.getConfig()).isNotEqualTo("Hello test");
         EnvironmentTestUtils.addEnvironment(environment, "message:Hello test");
-        assertThat(controller.getMessage()).isNotEqualTo("Hello test");
+        assertThat(controller.getConfig()).isNotEqualTo("Hello test");
         refresher.refresh();
-        assertThat(controller.getMessage()).isEqualTo("Hello test");
+        assertThat(controller.getConfig()).isEqualTo("Hello test");
     }
 
 }
