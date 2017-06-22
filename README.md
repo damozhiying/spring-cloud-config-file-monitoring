@@ -45,7 +45,7 @@ For this demonstration I have locally installed a GitBlit server, but of course 
   3.2. spring.cloud.config.server.native.searchLocations
  
 ## Stones found in the way and solved
-1. There is a mandatory Dependency Management configuration, which in the base code was set as follows:
+1. There is a mandatory Dependency Management configuration, the Spring Cloud base version dependencies pom import, which in the base code was set as follows:
   *`<dependencyManagement>
        <dependencies>
 			<dependency>
