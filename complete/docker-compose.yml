@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+    rabbitmq:
+        image: rabbitmq:latest
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - pocnetwork
+
+
+    configservice1:
+        build: ./configuration-service
+        container_name: springcloudconfigpoc
+        ports:
+            - "8888:8888"
+        depends_on:
+          - rabbitmq
+        networks:
+          - pocnetwork
+
+networks:
+  pocnetwork:
+    driver: bridge
+  
