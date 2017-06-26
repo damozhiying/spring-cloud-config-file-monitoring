@@ -34,7 +34,7 @@ import org.slf4j.Logger
 import groovy.json.JsonBuilder
 
 /**
- * Sample Gitblit Post-Receive Hook: fisheye
+ * Spring PoC Gitblit Post-Receive Hook: Notify-commit
  *
  * The Post-Receive hook is executed AFTER the pushed commits have been applied
  * to the Git repository.  This is the appropriate point to trigger an
@@ -69,19 +69,19 @@ import groovy.json.JsonBuilder
  *  
  */
 // Indicate we have started the script
-logger.info("fisheye hook triggered by ${user.username} for ${repository.name}")
+logger.info("Notify-commit hook triggered by ${user.username} for ${repository.name}")
 
-// define your fisheye url here or set groovy.fisheyeServer in 
+// define your Notify-commit url here or set groovy.notifyCommitUrl in 
 // gitblit.properties or web.xml
-def fisheyeUrl = gitblit.getString('groovy.fisheyeServer', 'http://configservice1:8888/monitor')
+def notifyCommitUrl = gitblit.getString('groovy.notifyCommitUrl', 'http://configservice1:8888/monitor')
 
-// define your fisheye API token or set groovy.fisheyeApiToken in
+// define your notifyCommitUrl API token or set groovy.notifyCommitApiToken in
 // gitblit.properties or web.xml
-def fisheyeApiToken = gitblit.getString('groovy.fisheyeApiToken', '')
+def notifyCommitApiToken = gitblit.getString('groovy.notifyCommitApiToken', '')
 
 // whether to remove .git suffix from repository name
 // may be defined in gitblit.properties or web.xml
-def fisheyeRemoveGitSuffix = gitblit.getBoolean('groovy.fisheyeRemoveGitSuffix', false)
+def notifyCommitRemoveGitSuffix = gitblit.getBoolean('groovy.notifyCommitRemoveGitSuffix', false)
 def summaryUrl
 def commitUrl
 def repoName = repository.name
@@ -96,16 +96,15 @@ if (gitblit.getBoolean(Keys.web.mountParameters, true)) {
 }
 
 Repository r = gitblit.getRepository(repoName)
-if (fisheyeRemoveGitSuffix && repoName.toLowerCase().endsWith('.git')) repoName = repoName.substring(0, repoName.length() - 4)
+if (notifyCommitRemoveGitSuffix && repoName.toLowerCase().endsWith('.git')) repoName = repoName.substring(0, repoName.length() - 4)
 
 // define the trigger url
-def triggerUrl = "$fisheyeUrl"
+def triggerUrl = "$notifyCommitUrl"
 
 // construct a simple text summary of the changes contained in the push
 def branchBreak = '>---------------------------------------------------------------\n'
 def commitBreak = '\n\n ----\n'
 def commitCount = 0
-def changes = ''
 SimpleDateFormat df = new SimpleDateFormat(gitblit.getString(Keys.web.datetimestampLongFormat, 'EEEE, MMMM d, yyyy h:mm a z'))
 def table = { "\n ${JGitUtils.getDisplayName(it.authorIdent)}\n ${df.format(JGitUtils.getCommitDate(it))}\n\n $it.shortMessage\n\n $commitUrl$it.id.name" }
 def filelist = []
@@ -125,9 +124,6 @@ for (command in commands) {
 			for (commit in commits) {
 				def files = JGitUtils.getFilesInCommit(r, commit)
 				for (file in files) {
-					println "Change type: ${file.changeType}\n" +
-					"File's path property: ${file.path}\n" +
-					"File's name property: ${file.name}"
 					filelist.add(file.name)
 				}
 			}
@@ -138,9 +134,6 @@ for (command in commands) {
 			for (commit in commits) {
 				def files = JGitUtils.getFilesInCommit(r, commit)
 				for (file in files) {
-					println "Change type: ${file.changeType}\n" +
-					"File's path property: ${file.path}\n" +
-					"File's name property: ${file.name}"
 					filelist.add(file.name)
 				}
 			}
@@ -150,9 +143,6 @@ for (command in commands) {
 				for (commit in commits) {
 				def files = JGitUtils.getFilesInCommit(r, commit)
 				for (file in files) {
-					println "Change type: ${file.changeType}\n" +
-					"File's path property: ${file.path}\n" +
-					"File's name property: ${file.name}"
 					filelist.add(file.name)
 				}
 			}
@@ -163,9 +153,6 @@ for (command in commands) {
 			for (commit in commits) {
 				def files = JGitUtils.getFilesInCommit(r, commit)
 				for (file in files) {
-					println "Change type: ${file.changeType}\n" +
-					"File's path property: ${file.path}\n" +
-					"File's name property: ${file.name}"
 					filelist.add(file.name)
 				}
 			}
@@ -176,36 +163,23 @@ for (command in commands) {
 }
 // close the repository reference
 r.close()
-logger.info('changes >>' + changes);
 // trigger the build
 def _url = new URL(triggerUrl)
 def _con = _url.openConnection()
 
 // set up connection
 _con.setRequestMethod("POST")
-_con.setRequestProperty("X-Api-Key", fisheyeApiToken)
+_con.setRequestProperty("X-Api-Key", notifyCommitApiToken)
 _con.setRequestProperty("User-Agent", "Gitblit")
 _con.setRequestProperty("Content-Type","application/json")
-def pathstring="\"path\":"
-
-def jsonText = '''
-{"uuid":"1",
-	"location":"badalona",
-	"name":"david",
-	"content":"badalona",
-	"owner":"badalona",
-	"path": ["*"]
-}'''
 def data = [
   path: filelist.collect {it}
 ]
 
 def json = new JsonBuilder(data)
-logger.info("json list >>" + json)
+logger.info("Files modified: " + json)
 byte[] postDataBytes = json.toString().getBytes("UTF-8");
 _con.setDoOutput(true)
-_con.getOutputStream().write(postDataBytes);
 // send post request
-
-
-logger.info("fisheye response code: ${_con.responseCode}")
+_con.getOutputStream().write(postDataBytes);
+logger.info("Notify-commit response code: ${_con.responseCode}")

@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
     rabbitmq:
@@ -33,6 +33,14 @@ services:
           - gitblit
         networks:
           - pocnetwork
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost:8888/healthcheck || exit 1"]
+            #test: curl -f https://localhost:8888 || exit 1
+            #test: ["CMD", "curl", "-f", "http://localhost:8888"]
+            interval: 20s
+            timeout: 10s
+            retries: 5
+
           
     configclient1:
         build: 
@@ -44,8 +52,10 @@ services:
         ports:
             - "8080:8080"
         depends_on:
-          - rabbitmq
-          - configservice1
+            configservice1:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_started
         networks:
           - pocnetwork
 
