@@ -35,7 +35,10 @@ services:
           - pocnetwork
           
     configclient1:
-        build: ./configuration-client
+        build: 
+            context: ./configuration-client
+            args:
+                client_active_profiles: dev,nosql
         container_name: poc-configclient1
         image: springpoc/configclient1
         ports:
