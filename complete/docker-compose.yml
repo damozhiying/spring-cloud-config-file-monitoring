@@ -3,20 +3,46 @@ version: '2'
 services:
     rabbitmq:
         image: rabbitmq:latest
+        container_name: poc-rabbitmq
         ports:
             - "5672:5672"
             - "15672:15672"
         networks:
             - pocnetwork
-
+    
+    gitblit:
+        build: ./gitblit-image
+        container_name: poc-gitblit
+        image: springpoc/gitblit
+        ports:
+            - "8090:8090"
+            - "8453:8453"
+            - "9418:9418"
+            - "29418:29418"
+        networks:
+            - pocnetwork
 
     configservice1:
         build: ./configuration-service
-        container_name: springcloudconfigpoc
+        container_name: poc-configserver1
+        image: springpoc/configserver1
         ports:
             - "8888:8888"
         depends_on:
           - rabbitmq
+          - gitblit
+        networks:
+          - pocnetwork
+          
+    configclient1:
+        build: ./configuration-client
+        container_name: poc-configclient1
+        image: springpoc/configclient1
+        ports:
+            - "8080:8080"
+        depends_on:
+          - rabbitmq
+          - configservice1
         networks:
           - pocnetwork
 

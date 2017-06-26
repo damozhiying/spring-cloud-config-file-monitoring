@@ -1,4 +1,6 @@
 FROM frolvlad/alpine-oraclejdk8:slim
+#RUN apk update && apk upgrade && \
+#	apk add --no-cache bash git openssh
 VOLUME /tmp
 #RUN echo nameserver 8.8.8.8 > /etc/resolv.conf
 #COPY resolv.conf /etc/resolv.conf
