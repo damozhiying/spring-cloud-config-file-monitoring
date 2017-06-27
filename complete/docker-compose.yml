@@ -45,8 +45,8 @@ services:
     configclient1:
         build: 
             context: ./configuration-client
-            args:
-                client_active_profiles: dev,nosql
+        environment:
+           - SPRING_PROFILES_ACTIVE=default
         container_name: poc-configclient1
         image: springpoc/configclient1
         ports:
