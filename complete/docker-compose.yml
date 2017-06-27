@@ -41,17 +41,55 @@ services:
             timeout: 10s
             retries: 5
 
+    configservice2:
+        build: ./configuration-service
+        container_name: poc-configserver2
+        image: springpoc/configserver2
+        ports:
+            - "8889:8888"
+        depends_on:
+          - rabbitmq
+          - gitblit
+        networks:
+          - pocnetwork
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost:8888/healthcheck || exit 1"]
+            #test: curl -f https://localhost:8888 || exit 1
+            #test: ["CMD", "curl", "-f", "http://localhost:8888"]
+            interval: 20s
+            timeout: 10s
+            retries: 5
           
     configclient1:
         build: 
             context: ./configuration-client
         environment:
+           - SPRING_APPLICATION_NAME=client1
            - SPRING_PROFILES_ACTIVE=default
-           - SPRING_CLOUD_CONFIG_URI=http://configservice1:8889
+           - SPRING_CLOUD_CONFIG_URI=http://configservice2:8888
         container_name: poc-configclient1
         image: springpoc/configclient1
         ports:
             - "8080:8080"
+        depends_on:
+            configservice2:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_started
+        networks:
+          - pocnetwork
+    
+    configclient2:
+        build: 
+            context: ./configuration-client
+        environment:
+           - SPRING_APPLICATION_NAME=client2
+           - SPRING_PROFILES_ACTIVE=default
+           - SPRING_CLOUD_CONFIG_URI=http://configservice1:8888
+        container_name: poc-configclient2
+        image: springpoc/configclient2
+        ports:
+            - "8081:8080"
         depends_on:
             configservice1:
                 condition: service_healthy
@@ -59,6 +97,7 @@ services:
                 condition: service_started
         networks:
           - pocnetwork
+    
 
 networks:
   pocnetwork:
