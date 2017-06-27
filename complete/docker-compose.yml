@@ -47,6 +47,7 @@ services:
             context: ./configuration-client
         environment:
            - SPRING_PROFILES_ACTIVE=default
+           - SPRING_CLOUD_CONFIG_URI=http://configservice1:8889
         container_name: poc-configclient1
         image: springpoc/configclient1
         ports:

@@ -4,3 +4,4 @@ services:
     configclient1:
         environment:
            - SPRING_PROFILES_ACTIVE=dev,nosql
+           - SPRING_CLOUD_CONFIG_URI=http://configservice1:8888
