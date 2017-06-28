@@ -8,7 +8,7 @@ services:
             - "5672:5672"
             - "15672:15672"
         networks:
-            - pocnetwork
+            - rabbitmqnetwork
     
     gitblit:
         build: ./gitblit-image
@@ -27,12 +27,13 @@ services:
         container_name: poc-configserver1
         image: springpoc/configserver1
         ports:
-            - "8888:8888"
+            - "8890:8888"
         depends_on:
           - rabbitmq
           - gitblit
         networks:
           - pocnetwork
+          - rabbitmqnetwork
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost:8888/healthcheck || exit 1"]
             #test: curl -f https://localhost:8888 || exit 1
@@ -52,6 +53,7 @@ services:
           - gitblit
         networks:
           - pocnetwork
+          - rabbitmqnetwork
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost:8888/healthcheck || exit 1"]
             #test: curl -f https://localhost:8888 || exit 1
@@ -61,12 +63,13 @@ services:
             retries: 5
           
     configclient1:
-        build: 
+        build:
             context: ./configuration-client
         environment:
            - SPRING_APPLICATION_NAME=client1
            - SPRING_PROFILES_ACTIVE=default
-           - SPRING_CLOUD_CONFIG_URI=http://configservice2:8888
+           - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8889
+           - SPRING_RABBITMQ_HOST=192.168.99.100
         container_name: poc-configclient1
         image: springpoc/configclient1
         ports:
@@ -76,8 +79,6 @@ services:
                 condition: service_healthy
             rabbitmq:
                 condition: service_started
-        networks:
-          - pocnetwork
     
     configclient2:
         build: 
@@ -85,7 +86,8 @@ services:
         environment:
            - SPRING_APPLICATION_NAME=client2
            - SPRING_PROFILES_ACTIVE=default
-           - SPRING_CLOUD_CONFIG_URI=http://configservice1:8888
+           - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8890
+           - SPRING_RABBITMQ_HOST=192.168.99.100
         container_name: poc-configclient2
         image: springpoc/configclient2
         ports:
@@ -95,11 +97,10 @@ services:
                 condition: service_healthy
             rabbitmq:
                 condition: service_started
-        networks:
-          - pocnetwork
-    
 
 networks:
   pocnetwork:
+    driver: bridge
+  rabbitmqnetwork:
     driver: bridge
   
