@@ -1,4 +1,6 @@
-FROM openjdk:jre
+#FROM openjdk:jre
+#FROM gliderlabs/alpine:3.4
+FROM debian:latest
 MAINTAINER Jacek Kowalski <Jacek@jacekk.info>
 
 ENV GITBLIT_VERSION 1.8.0
